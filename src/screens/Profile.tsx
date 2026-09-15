@@ -1,3 +1,4 @@
+import { VoiceLibrary } from "../components/VoiceLibrary";
 import { useState } from "react";
 import { Switch, Text, View } from "react-native";
 import { Button, Card, s } from "../components/ui";
@@ -177,9 +178,10 @@ export function Profile({ night }: { night: Night }) {
         </Text>
       )}
       <Text style={s.body}>
-        Moonline의 인물은 가상의 캐릭터입니다. 음성은 녹음하지 않으며, 대화 저장
+        Moonline의 인물은 가상의 캐릭터입니다. 직접 녹음 버튼을 눌렀을 때만 마이크를 사용해요. 대화 저장
         여부는 예약할 때 선택할 수 있어요.
       </Text>
+      <VoiceLibrary ownerId={night.profile!.id} />
       {!DEMO ? (
         <Button secondary onPress={() => void supabase?.auth.signOut()}>
           로그아웃

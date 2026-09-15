@@ -17,10 +17,10 @@ export function FilmPoster({
         height,
         borderRadius: 28,
         overflow: "hidden",
-        backgroundColor: "#7B8060",
+        backgroundColor: "#151B30",
         borderWidth: 1,
-        borderColor: "rgba(255,253,235,.85)",
-        shadowColor: "#6B5435",
+        borderColor: "rgba(210,215,255,.22)",
+        shadowColor: "#000000",
         shadowOpacity: 0.15,
         shadowRadius: 20,
       }}
@@ -28,9 +28,9 @@ export function FilmPoster({
       <ReededPhoto height={height} />
       <LinearGradient
         colors={[
-          "rgba(34,43,26,.22)",
-          "rgba(82,60,27,0)",
-          "rgba(34,43,26,.28)",
+          "rgba(12,16,35,.66)",
+          "rgba(22,19,43,.4)",
+          "rgba(9,13,27,.82)",
         ]}
         locations={[0, 0.5, 1]}
         style={[
@@ -55,7 +55,7 @@ export function FilmPoster({
               lineHeight: 51,
               fontWeight: "300",
               letterSpacing: -2.5,
-              color: "#FFE79F",
+              color: "#E6DDFB",
             }}
           >
             {script}

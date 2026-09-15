@@ -16,7 +16,7 @@ export default function DateFields(p: DateFieldsProps) {
       </Button>
       {mode ? (
         <DateTimePicker
-          themeVariant="light"
+          themeVariant="dark"
           value={isNaN(value.getTime()) ? new Date() : value}
           mode={mode}
           display={Platform.OS === "ios" ? "spinner" : "default"}

@@ -1,3 +1,4 @@
+import type { ClonedVoice } from "../../shared/voice.ts";
 import type { Call, Profile } from "../../shared/model.ts";
 export type ServerCall = Call & {
   userId: string;
@@ -9,7 +10,7 @@ export type ServerCall = Call & {
   summaryState?: "pending" | "processing" | "ready" | "failed";
   summaryClaimedAt?: number;
 };
-export type ServerProfile = Profile & { phone?: string; pushToken?: string };
+export type ServerProfile = Profile & { phone?: string; pushToken?: string; customVoices?: ClonedVoice[] };
 export function publicCall(c: ServerCall): Call {
   const {
     userId,
@@ -25,7 +26,7 @@ export function publicCall(c: ServerCall): Call {
   return visible;
 }
 export function publicProfile(p: ServerProfile): Profile {
-  const { phone, pushToken, ...visible } = p;
+  const { phone, pushToken, customVoices, ...visible } = p;
   return {
     ...visible,
     phoneMasked: phone

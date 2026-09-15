@@ -155,8 +155,8 @@ export async function previewAudio(name: string, config: Config) {
     body: JSON.stringify({
       model: config.ttsModel,
       voice: v.providerVoice,
-      input: "여보세요? 오늘 하루 어땠어요? 당신의 이야기를 듣고 싶었어요.",
-      instructions: v.description + "의 분위기로 짧고 자연스럽게 말하세요.",
+      input: "여보세요? 아직 안 자? 그냥, 목소리 듣고 싶어서 전화했어.",
+      instructions: v.description + "의 음색으로 늦은 밤 가까운 사람에게 조용히 전화하듯 말하세요. 낭독이나 안내 방송 같은 억양을 피하고, 문장 사이에 짧게 숨을 쉬며 부드러운 일상 대화의 리듬을 유지하세요. 과장된 속삭임이나 감정 연기는 하지 마세요.",
       response_format: "mp3",
     }),
   });

@@ -3,7 +3,7 @@
 Read HOME-HANDOFF.md and README.md before starting work. The original project name was 밤편지; preserve docs/ORIGINAL-PLAN.txt as source material.
 
 - Expo SDK 54 / React Native app; Node.js 24. Root app is demo by default and requires no external accounts.
-- Preserve warm reeded-glass design and clean system sans typography. Do not reintroduce handwriting fonts.
+- Current user-requested direction: an edge-to-edge golden moon and starry midnight sky (left half refracted vertical glass, right half vintage film grain); no human portrait or framed hero, and a rose MOONLINE wordmark progressing from thin to heavy letters (no semicolon). Preserve clean system sans typography; do not reintroduce handwriting fonts. See docs/DESIGN-UPDATE-2026-09-16.md.
 - Keep the existing local storage keys for compatibility with prior demo records.
 - The user has no Twilio/OpenAI/Supabase accounts configured yet. Do not claim real phone calls, voice cloning, video, or payments work without integration and verification.
 - Keep API keys, personal recordings, local databases, environment files, node_modules, and build artifacts out of Git. Only empty .env.example templates belong in the repository.

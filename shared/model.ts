@@ -1,3 +1,4 @@
+import type { VoiceChoice } from "./voice.ts";
 import { quoteCandidates, rememberedFacts } from "./memory.ts";
 export type Status =
   | "draft"
@@ -11,6 +12,7 @@ export type Message = { speaker: "you" | "caller"; text: string; at?: number };
 export type Call = {
   id: string;
   voice: string;
+  voiceChoice?: VoiceChoice;
   characterId?: string;
   characterName?: string;
   backstory?: string;
@@ -57,6 +59,7 @@ export type CallDraft = Pick<
   | "userNickname"
   | "anniversary"
   | "voice"
+  | "voiceChoice"
   | "scenarioId"
   | "situation"
   | "relationship"

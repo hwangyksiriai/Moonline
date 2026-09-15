@@ -11,7 +11,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useNight } from "../src/hooks/useNight";
 import { DEMO } from "../src/services/config";
-import { Button, Orb, s, colors, sans } from "../src/components/ui";
+import { Button, Orb, s, colors } from "../src/components/ui";
 import { Onboarding, SignIn } from "../src/screens/Welcome";
 import { Home } from "../src/screens/Home";
 import { CreateCall } from "../src/screens/CreateCall";
@@ -26,7 +26,8 @@ import { History } from "../src/screens/History";
 import { Profile } from "../src/screens/Profile";
 import { terminal, type Call } from "../shared/model";
 
-import { GlassSurface, WarmBackdrop } from "../src/components/Glass";
+import { Wordmark } from "../src/components/Wordmark";
+import { GlassSurface, NightBackdrop } from "../src/components/Glass";
 
 type Screen = "home" | "create" | "waiting" | "history" | "profile" | "done";
 export default function App() {
@@ -102,7 +103,7 @@ export default function App() {
   if (live?.status === "connected" && DEMO)
     return (
       <SafeAreaView style={s.page}>
-        <WarmBackdrop />
+        <NightBackdrop subdued />
         <KeyboardAvoidingView
           style={{ flex: 1 }}
           behavior={Platform.OS === "ios" ? "padding" : undefined}
@@ -121,7 +122,7 @@ export default function App() {
     );
   return (
     <SafeAreaView style={s.page}>
-      <WarmBackdrop />
+      <NightBackdrop subdued={screen === "create" || screen === "history" || screen === "profile" || (night.onboarded && !night.profile)} />
       <KeyboardAvoidingView
         style={{ flex: 1 }}
         behavior={Platform.OS === "ios" ? "padding" : undefined}
@@ -142,24 +143,13 @@ export default function App() {
           <Pressable
             accessibilityRole="button"
             disabled={!!live}
+            accessibilityLabel="Moonline 홈"
             onPress={() => navigate("home")}
           >
-            <Text
-              style={[
-                s.label,
-                {
-                  letterSpacing: -0.8,
-                  fontFamily: sans,
-                  fontSize: 25,
-                  fontWeight: "500",
-                },
-              ]}
-            >
-              Moonline <Text style={{ color: colors.accent }}>✦</Text>
-            </Text>
+            <Wordmark />
           </Pressable>
-          <Text style={s.eyebrow}>
-            {DEMO ? "NIGHT LETTER / DEMO" : "NIGHT LETTER"}
+          <Text style={[s.eyebrow, { fontSize: 9, letterSpacing: 1.8 }]}>
+            {DEMO ? "DEMO" : "NIGHT LETTER"}
           </Text>
         </GlassSurface>
         <ScrollView
@@ -183,7 +173,7 @@ export default function App() {
             >
               <Text
                 accessibilityRole="alert"
-                style={{ color: "#A34538", lineHeight: 23 }}
+                style={{ color: colors.danger, lineHeight: 23 }}
               >
                 {night.error} · 닫기
               </Text>
@@ -299,7 +289,7 @@ export default function App() {
                 borderRadius: 28,
                 borderWidth: 1,
                 borderColor: colors.line,
-                backgroundColor: "rgba(255,249,233,.38)",
+                backgroundColor: "rgba(17,22,39,.72)",
                 justifyContent: "space-around",
               },
             ]}
@@ -323,7 +313,7 @@ export default function App() {
                   padding: 10,
                   borderRadius: 20,
                   backgroundColor:
-                    screen === t.id ? "rgba(213,226,193,.8)" : "transparent",
+                    screen === t.id ? colors.selected : "transparent",
                 }}
               >
                 <Text

@@ -1,11 +1,10 @@
 import { DEMO } from "../services/config";
 import { Pressable, ScrollView, Text, View } from "react-native";
-import { GlassSurface } from "../components/Glass";
-import { FilmPoster } from "../components/FilmPoster";
+import { GlassSurface, MoonSpace } from "../components/Glass";
 
 import { scenarios, scenarioOf } from "../../shared/catalog";
 import { countdown, type Call } from "../../shared/model";
-import { Button, Card, s, colors, sans } from "../components/ui";
+import { Button, Card, s, colors } from "../components/ui";
 import type { Night } from "../hooks/useNight";
 export function Home({
   night,
@@ -23,22 +22,19 @@ export function Home({
     .sort((a, b) => a.scheduledAt - b.scheduledAt);
   return (
     <>
-      <Text style={s.eyebrow}>A VOICE TO END YOUR DAY</Text>
-      <Text style={s.title}>오늘, 누구에게{"\n"}전화받고 싶나요?</Text>
-      <Text style={s.body}>
-        {night.profile?.name}님, 하루의 끝에 다정함을 남겨요.
-      </Text>
-      {DEMO ? (
-        <Text style={s.body}>
-          앱 안에서 글로 답하고 기기 음성으로 듣는 체험판이에요.
-        </Text>
-      ) : null}
+      <MoonSpace />
+      <View style={{ gap: 12 }}>
+        <Text style={s.eyebrow}>A VOICE TO END YOUR DAY</Text>
+        <Text style={s.title}>오늘, 누구에게{"\n"}전화받고 싶나요?</Text>
+        <Text style={s.body}>{night.profile?.name}님, 하루의 끝에 다정함을 남겨요.</Text>
+      </View>
       <Button onPress={() => onCreate("comfort")}>
         {DEMO ? "다정한 전화 체험하기" : "다정한 전화 예약하기"}
       </Button>
       <Button secondary onPress={() => onCreate("custom")}>
         나만의 전화 만들기 · 이어 쓰기
       </Button>
+      {DEMO ? <Text style={s.body}>앱 안에서 글로 답하고 기기 음성으로 듣는 체험판이에요.</Text> : null}
       {pending.length ? (
         <View style={{ gap: 12 }}>
           <Text style={s.label}>
@@ -139,7 +135,7 @@ export function Home({
                 <Text
                   style={{
                     fontSize: 74,
-                    color: "#788261",
+                    color: colors.accent,
                     textAlign: "center",
                     marginVertical: 8,
                   }}
@@ -162,20 +158,6 @@ export function Home({
       <Button secondary onPress={() => onCreate("custom")}>
         ＋ 나만의 전화 만들기
       </Button>
-      <FilmPoster script={"Somewhere,\nsomeone."} height={375}>
-        <Text
-          style={{
-            fontFamily: sans,
-            color: "#FFF2D3",
-            fontSize: 20,
-            fontWeight: "400",
-            letterSpacing: -0.5,
-            lineHeight: 31,
-          }}
-        >
-          잊고 지낸 마음이,{"\n"}전화 한 통으로 돌아오는 밤.
-        </Text>
-      </FilmPoster>
       <Text style={[s.body, s.center]}>
         아직 오지 않은 순간에도,{"\n"}당신을 위한 목소리가 있어요.
       </Text>

@@ -1,17 +1,18 @@
+import { deviceSpeechOptions } from "../services/deviceVoice";
 import { wantsToEnd } from "../../shared/memory";
 import { useEffect, useRef, useState } from "react";
 import { Switch, ScrollView, Text, View, Vibration } from "react-native";
 import * as Speech from "expo-speech";
-import { scenarioOf, voiceOf } from "../../shared/catalog";
+import { scenarioOf } from "../../shared/catalog";
 import {
   type Call,
   type Message,
   countdown,
   elapsed,
 } from "../../shared/model";
-import { FilmPoster } from "../components/FilmPoster";
+import { MoonSpace } from "../components/Glass";
 import { waitingStage } from "../../shared/waiting";
-import { Button, Card, Orb, s, colors, sans } from "../components/ui";
+import { Button, Card, s, colors, sans } from "../components/ui";
 import { Field, SectionTitle } from "../components/fields";
 import { opening, mockReply } from "../services/conversation";
 import { DEMO } from "../services/config";
@@ -42,21 +43,22 @@ export function Waiting({
     stage = waitingStage(call.scheduledAt - night.now);
   return (
     <>
+      <MoonSpace />
       <Text style={s.eyebrow}>
         {stage === "soon" ? "잠시 후 전화가 도착해요" : "예약이 담겼어요"}
       </Text>
       <Text style={s.title}>{name}에게서 오는 전화</Text>
-      <FilmPoster script="" height={260}>
-        <Text style={{ color: "#FFF7DF", fontSize: 18 }}>
+      <View style={{ gap: 10, paddingVertical: 12 }}>
+        <Text style={{ color: "#E6F0FA", fontSize: 18 }}>
           {call.userNickname || night.profile?.name}님, 곧 만나요.
         </Text>
         <Text
           accessibilityLiveRegion="none"
-          style={[s.time, { color: "#FFF2CB", fontSize: 38 }]}
+          style={[s.time, { color: "#E6F0FA", fontSize: 38 }]}
         >
           {countdown(call.scheduledAt, night.now)}
         </Text>
-        <Text style={{ color: "#FFF7DF", fontSize: 14 }}>
+        <Text style={{ color: "#E6F0FA", fontSize: 14 }}>
           {new Date(call.scheduledAt).toLocaleString("ko-KR", {
             month: "long",
             day: "numeric",
@@ -64,7 +66,7 @@ export function Waiting({
             minute: "2-digit",
           })}
         </Text>
-      </FilmPoster>
+      </View>
       <Text style={s.body}>
         {DEMO
           ? "체험 전화는 이 앱을 열어 둔 상태에서 도착해요. 답장은 글로 입력해요."
@@ -151,7 +153,7 @@ export function Incoming({ night, call }: { night: Night; call: Call }) {
   return (
     <>
       <Text style={[s.eyebrow, s.center]}>INCOMING CALL</Text>
-      <Orb letter={(call.characterName || call.voice)[0]} pulse />
+      <MoonSpace />
       <Text style={[s.title, s.center]}>
         {call.characterName || call.voice}
       </Text>
@@ -214,20 +216,18 @@ export function Conversation({
     locked = useRef(false);
   function speak(text: string) {
     if (!sound) return;
-    const v = voiceOf(call.voice);
     const token = ++audioVersion.current;
-    void Speech.stop();
-    Speech.speak(text, {
-      language: "ko-KR",
-      pitch: v.pitch,
-      rate: v.rate,
-      onError: () => {
-        if (token === audioVersion.current)
-          setAudioError(
-            "음성을 재생하지 못했어요. 글로 계속하거나 소리를 다시 켜주세요.",
-          );
-      },
-    });
+    void (async () => {
+      await Speech.stop();
+      try {
+        const options = await deviceSpeechOptions(call.voiceChoice);
+        if (token !== audioVersion.current) return;
+        setAudioError("");
+        Speech.speak(text, { ...options, onError: () => {
+          if (token === audioVersion.current) setAudioError("음성을 재생하지 못했어요. 글로 대화를 이어갈 수 있어요.");
+        }});
+      } catch (e) { if (token === audioVersion.current) setAudioError((e as Error).message); }
+    })();
   }
   useEffect(() => {
     speak(messages[0].text);
@@ -340,7 +340,7 @@ export function Conversation({
               {
                 alignSelf: m.speaker === "you" ? "flex-end" : "flex-start",
                 maxWidth: "94%",
-                backgroundColor: m.speaker === "you" ? "#E6E9D8" : "#FAF6ED",
+                backgroundColor: m.speaker === "you" ? colors.selected : colors.card,
               },
             ]}
           >
@@ -393,7 +393,7 @@ export function Conversation({
 export function RealCall({ night, call }: { night: Night; call: Call }) {
   return (
     <>
-      <Orb letter={call.voice[0]} pulse />
+      <MoonSpace />
       <SectionTitle
         eyebrow="YOUR PHONE IS CALLING"
         title={
@@ -428,7 +428,7 @@ export function CallDone({
 }) {
   return (
     <>
-      <Orb letter={(call.characterName || call.voice)[0]} />
+      <MoonSpace />
       <SectionTitle
         eyebrow="A LETTER TO KEEP"
         title={(call.characterName || call.voice) + "와의 통화를 마쳤어요."}

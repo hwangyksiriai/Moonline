@@ -15,12 +15,16 @@ export const sans = Platform.select({
     '-apple-system, BlinkMacSystemFont, "Segoe UI", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif',
 });
 export const colors = {
-  bg: "#F0E6D2",
-  card: "rgba(255,250,236,.58)",
-  line: "rgba(255,255,245,.85)",
-  text: "#354137",
-  muted: "#626955",
-  accent: "#5B7158",
+  bg: "#09121E",
+  card: "rgba(71,97,120,.22)",
+  line: "rgba(193,216,237,.22)",
+  text: "#EDF4FA",
+  muted: "#ADBDCF",
+  accent: "#BCD9EE",
+  accentFill: "#B3CEE1",
+  onAccent: "#122333",
+  selected: "rgba(119,166,201,.23)",
+  danger: "#FFADA9",
 };
 export function Button({
   children,
@@ -82,7 +86,7 @@ export function Orb({
   }, [pulse, scale]);
   return (
     <Animated.View style={[s.orb, { transform: [{ scale }] }]}>
-      <Text style={{ fontSize: 48, color: "#667559" }}>{letter}</Text>
+      <Text style={{ fontSize: 48, color: colors.accent }}>{letter}</Text>
     </Animated.View>
   );
 }
@@ -127,8 +131,10 @@ export const s = StyleSheet.create({
   },
   button: {
     padding: 19,
-    backgroundColor: colors.accent,
+    backgroundColor: colors.accentFill,
     borderRadius: 12,
+    borderWidth: 1,
+    borderColor: "rgba(226,240,250,.5)",
     alignItems: "center",
   },
   secondary: {
@@ -140,7 +146,7 @@ export const s = StyleSheet.create({
     fontFamily: sans,
     fontSize: 16,
     fontWeight: "600",
-    color: "#FFF8E8",
+    color: colors.onAccent,
   },
   input: {
     backgroundColor: colors.card,
@@ -157,9 +163,13 @@ export const s = StyleSheet.create({
     width: 154,
     height: 154,
     borderRadius: 77,
-    backgroundColor: "rgba(255,243,209,.45)",
+    backgroundColor: "rgba(147,183,211,.12)",
     borderWidth: 1,
-    borderColor: "rgba(255,255,242,.95)",
+    borderColor: "rgba(210,228,244,.3)",
+    shadowColor: "#91BDDE",
+    shadowOpacity: 0.2,
+    shadowRadius: 38,
+    shadowOffset: { width: 0, height: 0 },
     alignSelf: "center",
     alignItems: "center",
     justifyContent: "center",
@@ -182,7 +192,7 @@ export const s = StyleSheet.create({
     backgroundColor: colors.card,
   },
   selected: {
-    borderColor: "#7C906A",
-    backgroundColor: "rgba(215,231,189,.72)",
+    borderColor: colors.accent,
+    backgroundColor: colors.selected,
   },
 });

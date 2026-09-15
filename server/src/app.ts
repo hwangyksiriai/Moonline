@@ -1,3 +1,4 @@
+import { voiceStudio } from "./voiceStudio.ts";
 import { quoteCandidates } from "../../shared/memory.ts";
 import express from "express";
 import cors from "cors";
@@ -274,6 +275,7 @@ export function createApp(
       legacyHeaders: false,
     }),
   );
+  app.use("/voice-studio", voiceStudio(config, repo));
   app.post("/auth", async (_, res) =>
     res.json(publicProfile((await repo.profile(res.locals.userId))!)),
   );

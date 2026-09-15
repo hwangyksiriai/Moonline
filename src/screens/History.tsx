@@ -4,7 +4,7 @@ import { Pressable, Switch, Text, View } from "react-native";
 import type { Night } from "../hooks/useNight";
 import { scenarioOf } from "../../shared/catalog";
 import { elapsed, terminal, type Call } from "../../shared/model";
-import { Button, Card, s } from "../components/ui";
+import { Button, Card, s, colors } from "../components/ui";
 import { Choice, Field, SectionTitle } from "../components/fields";
 export function History({
   night,
@@ -110,7 +110,7 @@ export function History({
             </Pressable>
             {c.quote ? (
               <>
-                <Text style={[s.body, { color: "#65754C" }]}>“{c.quote}”</Text>
+                <Text style={[s.body, { color: colors.accent }]}>“{c.quote}”</Text>
                 <Button secondary onPress={() => void night.favorite(c.id)}>
                   {c.favorite ? "♥ 저장됨" : "♡ 한마디 저장"}
                 </Button>

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Text, View } from "react-native";
-import { Button, Orb, s } from "../components/ui";
+import { Button, s, colors } from "../components/ui";
+import { MoonSpace } from "../components/Glass";
 import { Field, SectionTitle } from "../components/fields";
 import { DEMO } from "../services/config";
 import { emailAuth, oauth } from "../services/auth";
@@ -28,7 +29,7 @@ export function Onboarding({ night }: { night: Night }) {
   return (
     <>
       <Text style={s.eyebrow}>A LETTER, JUST FOR YOU</Text>
-      <Orb letter={p.icon} />
+      <MoonSpace />
       <Text style={s.title}>{p.title}</Text>
       <Text style={s.body}>{p.body}</Text>
       <View style={[s.row, { marginVertical: 28 }]}>
@@ -39,7 +40,7 @@ export function Onboarding({ night }: { night: Night }) {
               height: 4,
               width: i === page ? 40 : 12,
               borderRadius: 4,
-              backgroundColor: i === page ? "#5B7158" : "#DDD5C1",
+              backgroundColor: i === page ? colors.accent : colors.line,
             }}
           />
         ))}

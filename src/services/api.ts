@@ -4,6 +4,7 @@ export async function api<T>(
   path: string,
   method = "GET",
   body?: unknown,
+  timeoutMs = 15000,
 ): Promise<T> {
   if (!BACKEND) throw new Error("서버 주소가 설정되지 않았어요.");
   const {
@@ -17,7 +18,7 @@ export async function api<T>(
       "Content-Type": "application/json",
     },
     body: body === undefined ? undefined : JSON.stringify(body),
-    signal: AbortSignal.timeout(15000),
+    signal: AbortSignal.timeout(timeoutMs),
   });
   if (response.status === 204) return undefined as T;
   const result = await response.json();

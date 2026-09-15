@@ -1,3 +1,6 @@
+import { DeviceVoicePicker } from "../components/DeviceVoicePicker";
+import { VoiceLibrary } from "../components/VoiceLibrary";
+import type { VoiceChoice } from "../../shared/voice";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect, useRef, useState } from "react";
 import { useAudioPlayer, useAudioPlayerStatus } from "expo-audio";
@@ -9,7 +12,6 @@ import {
   scenarios,
   scenarioOf,
   voices,
-  voiceOf,
 } from "../../shared/catalog";
 import {
   type Call,
@@ -42,6 +44,7 @@ type Snapshot = {
   step: number;
   scenario: string;
   voice: string;
+  voiceChoice?: VoiceChoice;
   situation: string;
   relationship: string;
   other: string;
@@ -178,6 +181,7 @@ function CreateForm({
       saved?.scenario ?? initial?.scenarioId ?? scenarioId,
     ),
     [voice, setVoice] = useState(saved?.voice ?? initial?.voice ?? "Noah"),
+    [voiceChoice, setVoiceChoice] = useState<VoiceChoice | undefined>(saved?.voiceChoice ?? initial?.voiceChoice),
     [situation, setSituation] = useState(
       saved?.situation ?? initial?.situation ?? "",
     ),
@@ -231,6 +235,7 @@ function CreateForm({
       step,
       scenario,
       voice,
+      voiceChoice,
       situation,
       relationship,
       other,
@@ -252,6 +257,7 @@ function CreateForm({
     step,
     scenario,
     voice,
+    voiceChoice,
     situation,
     relationship,
     other,
@@ -276,6 +282,7 @@ function CreateForm({
     previewVersion.current++;
     void Speech.stop();
     setPreview("");
+    player.pause();
   }, [step]);
   const player = useAudioPlayer(null);
   const playerStatus = useAudioPlayerStatus(player);
@@ -292,28 +299,9 @@ function CreateForm({
   async function listen(name: string) {
     const token = ++previewVersion.current;
     try {
+      player.pause();
       setVoice(name);
       setPreview(name);
-      if (DEMO) {
-        await Speech.stop();
-        const v = voiceOf(name);
-        Speech.speak(
-          "여보세요? 오늘 하루 어땠어요? 당신의 이야기를 듣고 싶었어요.",
-          {
-            language: "ko-KR",
-            pitch: v.pitch,
-            rate: v.rate,
-            onDone: () => {
-              if (token === previewVersion.current) setPreview("");
-            },
-            onError: () => {
-              if (token !== previewVersion.current) return;
-              setPreview("");
-              night.setNote("기기에서 한국어 음성을 확인해 주세요.");
-            },
-          },
-        );
-      } else {
         const {
           data: { session },
         } = await requireAuth().auth.getSession();
@@ -323,16 +311,18 @@ function CreateForm({
         });
         if (!r.ok) throw new Error("목소리를 불러오지 못했어요.");
         const { url } = await r.json();
+        if (token !== previewVersion.current) return;
         player.replace({ uri: url });
         player.play();
-      }
     } catch (e) {
+      if (token !== previewVersion.current) return;
       setPreview("");
       night.setError(
         e instanceof Error ? e.message : "음성을 재생하지 못했어요.",
       );
     }
   }
+  const voiceLabel = DEMO ? (voiceChoice?.name || "기기 기본 한국어") : voice;
   function scheduledTime() {
     let at: number;
     if (when === "30s") at = Date.now() + 30000;
@@ -379,6 +369,7 @@ function CreateForm({
         anniversary: anniversary || undefined,
         scenarioId: scenario,
         voice,
+        voiceChoice,
         situation: situation.trim() || scenarioOf(scenario).description,
         relationship:
           relationship === "직접 입력" ? other.trim() : relationship,
@@ -484,7 +475,7 @@ function CreateForm({
               eyebrow="THE VOICE"
               title="어떤 목소리로\n전화할까요?"
             />
-            {voices.map((v) => (
+            {DEMO ? <DeviceVoicePicker value={voiceChoice} onChange={setVoiceChoice} /> : voices.map((v) => (
               <View
                 key={v.name}
                 style={[s.card, voice === v.name && s.selected]}
@@ -507,12 +498,7 @@ function CreateForm({
                 </Pressable>
               </View>
             ))}
-            {DEMO ? (
-              <Text style={s.body}>
-                체험판에서는 기기의 읽기 음성으로 분위기를 미리 들어요. 실제
-                통화 목소리와는 다를 수 있어요.
-              </Text>
-            ) : null}
+            <VoiceLibrary ownerId={night.profile!.id} />
           </>
         ) : step === 2 ? (
           <>
@@ -633,7 +619,7 @@ function CreateForm({
               <Text style={s.label}>{characterName || voice}에게 전화받기</Text>
               <Text style={s.body}>
                 {relationship === "직접 입력" ? other : relationship} ·{" "}
-                {personality.join(", ")} · {voice} 목소리
+                {personality.join(", ")} · {voiceLabel} 목소리
               </Text>
               <Text style={s.body}>
                 “
@@ -656,7 +642,7 @@ function CreateForm({
                   onPress={() => setStep(1)}
                   style={{ paddingVertical: 12 }}
                 >
-                  <Text style={s.body}>목소리 바꾸기 · {voice}</Text>
+                  <Text style={s.body}>목소리 바꾸기 · {voiceLabel}</Text>
                 </Pressable>
               </View>
             </Card>
@@ -697,7 +683,7 @@ function CreateForm({
             )}
             <Card>
               <Text style={s.label}>
-                {characterName || voice} · {voice} 목소리
+                {characterName || voice} · {voiceLabel} 목소리
               </Text>
               <Text style={s.body}>
                 {relationship === "직접 입력" ? other : relationship} ·{" "}
@@ -781,7 +767,7 @@ function CreateForm({
                 ? "시간 확인하기"
                 : "목소리 선택하기"
               : step === 1
-                ? voice + " 목소리로 계속"
+                ? voiceLabel + " 목소리로 계속"
                 : "시간 정하기"}
       </Button>
     </View>

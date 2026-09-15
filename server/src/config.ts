@@ -8,6 +8,7 @@ export type Config = {
   supabaseUrl?: string;
   supabaseKey?: string;
   openaiKey?: string;
+  elevenlabsKey?: string;
   realtimeModel: string;
   summaryModel: string;
   ttsModel: string;
@@ -57,6 +58,7 @@ export function configFrom(env: NodeJS.ProcessEnv = process.env): Config {
     supabaseUrl: env.SUPABASE_URL,
     supabaseKey: env.SUPABASE_SERVICE_ROLE_KEY,
     openaiKey: env.OPENAI_API_KEY,
+    elevenlabsKey: env.ELEVENLABS_API_KEY,
     realtimeModel: env.OPENAI_REALTIME_MODEL ?? "gpt-realtime",
     summaryModel: env.OPENAI_SUMMARY_MODEL ?? "gpt-4.1-mini",
     ttsModel: env.OPENAI_TTS_MODEL ?? "gpt-4o-mini-tts",
