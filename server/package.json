@@ -1,0 +1,32 @@
+{
+  "name": "moonline-server",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node --env-file-if-exists=.env --experimental-strip-types src/index.ts",
+    "dev": "node --env-file-if-exists=.env --watch --experimental-strip-types src/index.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "node --experimental-strip-types --test tests/*.test.ts",
+    "migrate": "node --env-file-if-exists=.env --experimental-strip-types src/migrate.ts"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "cors": "^2.8.5",
+    "helmet": "^8.1.0",
+    "express-rate-limit": "^8.1.0",
+    "pg": "^8.16.0",
+    "twilio": "^5.10.0",
+    "ws": "^8.18.0",
+    "zod": "^4.1.0",
+    "@supabase/supabase-js": "^2.57.0"
+  },
+  "devDependencies": {
+    "typescript": "~5.9.2",
+    "@types/node": "^24.0.0",
+    "@types/express": "^5.0.0",
+    "@types/cors": "^2.8.19",
+    "@types/pg": "^8.15.0",
+    "@types/ws": "^8.18.0"
+  }
+}

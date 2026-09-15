@@ -1,0 +1,1484 @@
+# 프로젝트명
+
+**밤편지**
+
+## 한 줄 정의
+
+사용자가 원하는 목소리, 상황, 시간을 설정하면 **예약한 시간에 실제 휴대폰으로 전화가 걸려오고 AI와 실시간으로 대화할 수 있는 모바일 서비스**.
+
+핵심은 AI 기능 자체가 아니라,
+
+**“기다리던 시간에 정말 전화가 울리는 경험”**
+
+이다.
+
+---
+
+# 1. 이번 개발 목표
+
+처음부터 모든 기능을 만들지 않는다.
+
+이번 MVP에서는 아래 경험이 실제로 동작하도록 구현한다.
+
+### 핵심 Flow
+
+사용자 가입
+
+→ 전화 시나리오 선택
+
+→ 목소리 선택
+
+→ 원하는 상황 입력
+
+→ 전화 받을 시간 선택
+
+→ 전화 예약
+
+→ 예약 시간까지 기다림
+
+→ 실제 휴대폰으로 전화 수신
+
+→ AI와 실시간 음성 대화
+
+→ 전화 종료
+
+→ 통화 기록 확인
+
+이 Flow가 처음부터 끝까지 실제로 동작하는 것이 MVP의 목표다.
+
+---
+
+# 2. 제품 컨셉
+
+일반적인 AI 챗봇처럼 보이면 안 된다.
+
+ChatGPT처럼 대화를 입력하는 서비스가 아니라
+
+**“누군가 나에게 전화한다”**
+
+는 경험에 집중한다.
+
+UI에서 다음과 같은 기술적인 단어는 최대한 노출하지 않는다.
+
+* AI
+* Prompt
+* TTS
+* Voice Model
+* LLM
+* Voice Clone
+
+대신 사용자에게 보여주는 요소는 다음 네 가지다.
+
+**사람**
+
+**상황**
+
+**감정**
+
+**시간**
+
+---
+
+# 3. 모바일 앱
+
+React Native 기반 모바일 앱으로 구현한다.
+
+가능하면 Expo를 사용한다.
+
+iOS / Android 모두 대응할 수 있는 구조로 만든다.
+
+디자인은 모바일 퍼스트.
+
+전체적인 분위기는:
+
+* 밤
+* 감성적
+* 몽환적
+* 따뜻함
+* 약간의 설렘
+* 현대적인 Z세대 감성
+
+너무 AI 서비스처럼 보이지 않도록 한다.
+
+---
+
+# 4. 첫 화면
+
+앱을 열었을 때 첫 문구.
+
+## 밤편지
+
+**오늘, 누구에게 전화받고 싶나요?**
+
+아래에 추천 전화 카드가 나온다.
+
+예시:
+
+❤️ 보고 싶어서 전화했어
+
+🌙 잠들기 전에 전화했어
+
+🎂 생일 축하해
+
+🫂 오늘 하루 많이 힘들었지?
+
+✨ 10년 후의 내가 전화했다
+
+👻 새벽 3시 모르는 번호
+
+카드를 좌우로 넘길 수 있게 만든다.
+
+아래에는
+
+**+ 나만의 전화 만들기**
+
+버튼.
+
+---
+
+# 5. 온보딩
+
+처음 가입한 사용자는 서비스가 무엇인지 바로 이해해야 한다.
+
+총 3페이지.
+
+## Page 1
+
+**기다리던 사람에게서
+전화가 옵니다.**
+
+원하는 사람과 상황을 선택하세요.
+
+---
+
+## Page 2
+
+**전화 받을 시간을 정하세요.**
+
+오늘 밤 10시.
+
+내일 새벽 1시.
+
+생일이 되는 순간.
+
+원하는 순간을 선택할 수 있습니다.
+
+---
+
+## Page 3
+
+**그리고 정말 전화가 옵니다.**
+
+당신의 이야기를 기억하고
+대화를 이어갑니다.
+
+CTA:
+
+**첫 전화 예약하기**
+
+---
+
+# 6. 회원가입
+
+MVP에서는 최대한 간단하게 한다.
+
+지원:
+
+* Apple 로그인
+* Google 로그인
+* 이메일 로그인
+
+사용자 데이터:
+
+name
+
+email
+
+phoneNumber
+
+timezone
+
+createdAt
+
+---
+
+# 7. 전화 만들기
+
+메인 기능.
+
+화면 상단:
+
+**어떤 전화를 받고 싶나요?**
+
+총 4단계 Wizard 형태.
+
+---
+
+# STEP 1. 상황 선택
+
+제목:
+
+**어떤 이야기를 시작할까요?**
+
+기본 Scenario 카드.
+
+### 위로
+
+“오늘 하루 많이 힘들었지?”
+
+### 사랑
+
+“보고 싶어서 전화했어.”
+
+### 생일
+
+“생일 축하해.”
+
+### 잠들기 전
+
+“잘 자라고 말해주고 싶었어.”
+
+### 미래의 나
+
+“10년 후의 내가 전화했다.”
+
+### 공포
+
+“이 전화… 받으면 안 돼.”
+
+### 직접 만들기
+
+“나만의 상황”
+
+직접 만들기를 선택하면 TextArea 표시.
+
+Placeholder:
+
+**어떤 상황에서 전화가 오는지 자유롭게 적어주세요.**
+
+예:
+
+우리는 3년째 연애 중이다.
+오늘은 내 생일인데 회사에서 너무 힘든 하루를 보냈다.
+퇴근한 남자친구가 집에 가는 길에 나에게 전화하는 상황이다.
+
+---
+
+# STEP 2. 목소리 선택
+
+제목:
+
+**어떤 목소리로 전화할까요?**
+
+MVP에서는 기본 Voice만 사용한다.
+
+Voice 카드:
+
+### Joon
+
+낮고 차분한 남성
+
+### Ian
+
+장난스럽고 밝은 남성
+
+### Luna
+
+따뜻하고 부드러운 여성
+
+### Mina
+
+밝고 사랑스러운 여성
+
+### Noah
+
+조용하고 감성적인 남성
+
+각 Voice마다
+
+▶ 목소리 들어보기
+
+버튼 제공.
+
+MVP에서는 실제 특정 유명인 음성 복제 기능은 구현하지 않는다.
+
+추후 Custom Voice 기능을 붙일 수 있도록 구조만 확장 가능하게 설계한다.
+
+---
+
+# STEP 3. 관계 및 캐릭터
+
+제목:
+
+**어떤 사람인가요?**
+
+입력값.
+
+### 나와의 관계
+
+선택:
+
+* 연인
+* 친구
+* 가족
+* 처음 만나는 사람
+* 미래의 나
+* 직접 입력
+
+### 성격
+
+복수 선택.
+
+* 다정한
+* 장난스러운
+* 차분한
+* 무뚝뚝한
+* 귀여운
+* 솔직한
+* 감성적인
+* 신비로운
+
+### 꼭 듣고 싶은 말
+
+선택 입력.
+
+Placeholder:
+
+예:
+“태어나줘서 고마워.”
+
+---
+
+# STEP 4. 전화 시간
+
+제목:
+
+**언제 전화할까요?**
+
+날짜 선택.
+
+시간 선택.
+
+빠른 선택:
+
+오늘 밤 10시
+
+오늘 밤 11시
+
+자정
+
+내일 아침
+
+직접 선택
+
+전화번호 입력.
+
+예약 CTA:
+
+**이 시간에 전화받기**
+
+---
+
+# 8. 예약 완료 화면
+
+가장 중요한 화면 중 하나.
+
+화면 중앙에 큰 시간 표시.
+
+### 22:00
+
+그리고 문구.
+
+**전화가 예약되었습니다.**
+
+오늘 밤 10시.
+
+누군가 당신에게 전화합니다.
+
+하단:
+
+전화까지
+
+**02 : 14 : 37**
+
+Countdown 표시.
+
+버튼:
+
+예약 수정
+
+예약 취소
+
+---
+
+# 9. 기다리는 경험
+
+홈에서 예약된 전화가 있으면 최상단에 표시.
+
+예:
+
+### 오늘의 전화
+
+🌙 잠들기 전에 전화했어
+
+오늘 22:00
+
+전화까지
+
+01:34:12
+
+Countdown이 계속 움직인다.
+
+전화 직전에 Push Notification.
+
+### 30분 전
+
+**30분 뒤 전화가 옵니다.**
+
+### 5분 전
+
+**조금 있으면 전화가 옵니다.**
+
+단 1분 전에는 Notification을 보내지 않는다.
+
+마지막 순간은 실제 전화가 갑자기 울리도록 한다.
+
+---
+
+# 10. 실제 전화
+
+예약 시간이 되면 서버에서 전화 발신 API를 실행한다.
+
+MVP는 Twilio 또는 유사한 Voice API를 사용한다.
+
+구조:
+
+Scheduled Job
+
+→ Backend
+
+→ Voice Provider API
+
+→ User Phone Number
+
+→ 실제 휴대폰 전화
+
+→ 사용자가 통화 수락
+
+→ 음성 Stream
+
+→ AI Conversation Engine
+
+→ AI Voice
+
+→ 전화망으로 반환
+
+---
+
+# 11. AI Conversation
+
+전화가 연결되면 미리 작성된 문장을 단순 재생하면 안 된다.
+
+실시간 대화를 한다.
+
+AI System Prompt를 다음 데이터로 생성한다.
+
+userName
+
+scenario
+
+relationship
+
+characterPersonality
+
+mustSayPhrase
+
+conversationGoal
+
+previousConversationSummary
+
+---
+
+# 12. 기본 AI System Prompt
+
+다음과 같은 구조를 사용한다.
+
+당신은 실제 전화 통화 속 인물이다.
+
+사용자는 당신이 AI라는 느낌을 받아서는 안 된다.
+
+현재 관계:
+{{relationship}}
+
+캐릭터 성격:
+{{personality}}
+
+현재 상황:
+{{scenario}}
+
+이번 전화의 목적:
+{{goal}}
+
+사용자 이름:
+{{userName}}
+
+반드시 자연스럽게 포함해야 하는 말:
+{{mustSayPhrase}}
+
+대화 원칙:
+
+1. 전화 통화처럼 짧고 자연스럽게 말한다.
+
+2. 한 번에 긴 문장을 말하지 않는다.
+
+3. 사용자의 말을 듣고 상황에 맞게 답한다.
+
+4. 같은 질문을 반복하지 않는다.
+
+5. 사용자의 말을 그대로 반복하지 않는다.
+
+6. 지나치게 상담사처럼 말하지 않는다.
+
+7. 실제 사람처럼 웃음, 머뭇거림, 짧은 침묵을 활용한다.
+
+8. 자연스럽게 먼저 새로운 화제를 꺼낼 수 있다.
+
+9. 현재 설정된 캐릭터의 성격을 유지한다.
+
+10. 상황을 벗어나지 않는다.
+
+첫 문장은 너무 길지 않게 한다.
+
+예:
+
+“여보세요?”
+
+사용자가 반응하면 그때부터 자연스럽게 상황을 시작한다.
+
+---
+
+# 13. 인간적인 대화
+
+AI가 지나치게 완벽하게 말하지 않도록 한다.
+
+예:
+
+아...
+
+잠깐.
+
+ㅋㅋㅋ 아니.
+
+음...
+
+그게 아니라.
+
+뭐라고 해야 하지.
+
+같은 표현을 적절히 사용할 수 있게 한다.
+
+단 너무 자주 반복하지 않는다.
+
+---
+
+# 14. 통화 종료
+
+통화 종료 후 앱에 자동으로 기록한다.
+
+화면:
+
+**통화가 종료되었습니다.**
+
+오늘 22:03
+
+12분 43초
+
+🌙 잠들기 전에 전화했어
+
+---
+
+AI가 통화 내용을 요약해서
+
+### 오늘의 한마디
+
+를 생성한다.
+
+예:
+
+**“오늘은 그냥 아무 생각하지 말고 푹 자.”**
+
+버튼:
+
+❤️ 저장
+
+다시 전화받기
+
+새로운 전화 만들기
+
+---
+
+# 15. 통화 기록
+
+Bottom Navigation:
+
+홈
+
+전화 만들기
+
+기록
+
+마이
+
+기록 탭에서 과거 통화 확인.
+
+예:
+
+SEP 15
+
+22:03
+
+🌙 잠들기 전에 전화했어
+
+12:43
+
+SEP 13
+
+00:00
+
+🎂 생일 축하해
+
+18:21
+
+---
+
+# 16. 통화 기억
+
+DB에 전체 통화 Transcript를 저장한다.
+
+통화 종료 후 AI가 Summary를 생성한다.
+
+예:
+
+사용자는 오늘 직장에서 상사에게 혼났고 많이 지쳐 있었다.
+
+내일 오전 10시에 중요한 발표가 있다.
+
+최근 잠을 제대로 자지 못하고 있다.
+
+다음 전화에서 AI가 이 Summary를 활용할 수 있게 한다.
+
+예:
+
+다음 통화:
+
+“오늘 발표 있다고 했잖아. 잘 끝났어?”
+
+이 기능은 MVP에서도 기본적인 형태로 구현한다.
+
+---
+
+# 17. 데이터 모델
+
+## users
+
+id
+
+name
+
+email
+
+phone_number
+
+timezone
+
+created_at
+
+---
+
+## voices
+
+id
+
+name
+
+description
+
+voice_provider
+
+voice_id
+
+preview_url
+
+avatar_url
+
+---
+
+## scenarios
+
+id
+
+title
+
+description
+
+category
+
+default_prompt
+
+thumbnail
+
+is_public
+
+---
+
+## calls
+
+id
+
+user_id
+
+voice_id
+
+scenario_id
+
+custom_scenario
+
+relationship
+
+personality
+
+must_say_phrase
+
+scheduled_at
+
+status
+
+phone_number
+
+started_at
+
+ended_at
+
+duration
+
+provider_call_id
+
+created_at
+
+---
+
+## call_transcripts
+
+id
+
+call_id
+
+speaker
+
+content
+
+timestamp
+
+---
+
+## call_memories
+
+id
+
+user_id
+
+call_id
+
+summary
+
+created_at
+
+---
+
+# 18. Call Status
+
+다음 상태를 사용한다.
+
+draft
+
+scheduled
+
+calling
+
+connected
+
+completed
+
+failed
+
+cancelled
+
+---
+
+# 19. Backend
+
+Backend에서 다음 API를 만든다.
+
+POST /auth
+
+GET /voices
+
+GET /scenarios
+
+POST /calls
+
+GET /calls
+
+GET /calls/:id
+
+PATCH /calls/:id
+
+DELETE /calls/:id
+
+POST /calls/:id/start
+
+POST /voice/webhook
+
+POST /voice/stream
+
+POST /calls/:id/complete
+
+---
+
+# 20. 기술 스택
+
+권장 구조:
+
+## Mobile
+
+React Native
+
+Expo
+
+TypeScript
+
+Expo Router
+
+## Backend
+
+Node.js
+
+TypeScript
+
+NestJS 또는 Express/Fastify
+
+## Database
+
+Supabase
+
+PostgreSQL
+
+## Auth
+
+Supabase Auth
+
+## Realtime AI
+
+OpenAI Realtime API와 연결 가능한 형태
+
+## Phone
+
+Twilio Voice API와 연결 가능한 형태
+
+## Push
+
+Expo Notifications
+
+## Hosting
+
+Vercel / Railway / Render 등 적합한 환경 사용.
+
+Backend는 WebSocket을 지원해야 한다.
+
+---
+
+# 21. 환경 변수
+
+코드 안에 API Key를 절대 직접 넣지 않는다.
+
+.env.example을 만든다.
+
+예:
+
+OPENAI_API_KEY=
+
+TWILIO_ACCOUNT_SID=
+
+TWILIO_AUTH_TOKEN=
+
+TWILIO_PHONE_NUMBER=
+
+SUPABASE_URL=
+
+SUPABASE_ANON_KEY=
+
+SUPABASE_SERVICE_ROLE_KEY=
+
+APP_URL=
+
+BACKEND_URL=
+
+---
+
+# 22. API Key가 없어도 실행 가능하도록 만들기
+
+중요.
+
+현재 개발 단계에서 Twilio/OpenAI Key가 없더라도 앱 전체를 테스트할 수 있도록
+
+**DEMO MODE**
+
+를 구현한다.
+
+.env:
+
+DEMO_MODE=true
+
+Demo Mode에서는 실제 전화 대신
+
+예약 시간에 Push Notification을 보내고
+
+앱 내부 Fake Incoming Call 화면을 띄운다.
+
+사용자가 전화를 받으면 Mock AI Conversation 화면으로 진입한다.
+
+나중에 실제 API Key를 넣으면
+
+Demo Mode → Real Call Mode
+
+로 전환될 수 있게 설계한다.
+
+---
+
+# 23. Fake Incoming Call
+
+실제 전화 API 연동 전 UI 확인용.
+
+화면 전체.
+
+밤편지
+
+Incoming Call
+
+캐릭터 Avatar
+
+이름:
+
+Joon
+
+하단:
+
+🔴 거절
+
+🟢 받기
+
+전화 수신 애니메이션 추가.
+
+단 실제 서비스에서는 이 화면 대신 진짜 전화망을 사용한다.
+
+---
+
+# 24. Design System
+
+전체적으로 Dark Mode.
+
+Background:
+
+#09090D 계열.
+
+Card:
+
+짙은 네이비 / 블랙 Glass 느낌.
+
+Point:
+
+Lavender / Purple / Pink Gradient.
+
+텍스트:
+
+White / Light Gray.
+
+Border Radius:
+
+20~28px.
+
+버튼:
+
+크고 둥글게.
+
+전체적으로
+
+AI SaaS 느낌 X
+
+데이트 앱 느낌 X
+
+게임 느낌 X
+
+감성적인 음악 앱 + 밤 + 전화 + 편지 느낌.
+
+---
+
+# 25. 애니메이션
+
+과도한 애니메이션은 사용하지 않는다.
+
+중요한 순간만 강조한다.
+
+예:
+
+전화 예약 완료
+
+→ 시간 숫자가 천천히 등장.
+
+Countdown
+
+→ 숫자가 자연스럽게 움직임.
+
+전화 수신
+
+→ Avatar 주변 Pulse Animation.
+
+Voice Preview
+
+→ Audio Wave Animation.
+
+---
+
+# 26. MVP에서 하지 않을 것
+
+이번 버전에서는 아래 기능은 구현하지 않는다.
+
+Celebrity Voice Clone
+
+아이돌 음성 무단 복제
+
+Video Call
+
+Group Call
+
+Social Feed
+
+공개 통화
+
+Audio Sharing
+
+Voice Marketplace
+
+Payment
+
+Subscription
+
+Voice 직접 학습
+
+영상에서 Voice 추출
+
+이 기능들은 향후 확장 영역으로 코드 구조만 고려한다.
+
+---
+
+# 27. 향후 추가 기능
+
+V2.
+
+Custom Voice
+
+사용자 음성 업로드
+
+Voice Training
+
+---
+
+V3.
+
+Story Mode
+
+DAY 1
+
+DAY 3
+
+DAY 7
+
+이런 식으로 여러 번 전화가 이어지는 이야기.
+
+---
+
+V4.
+
+Call Share
+
+통화 일부를 Audio Card로 만들어 SNS 공유.
+
+---
+
+V5.
+
+공식 IP Voice.
+
+배우
+
+가수
+
+아이돌
+
+성우
+
+Creator
+
+---
+
+V6.
+
+AI Video Call.
+
+---
+
+V7.
+
+Group Call.
+
+---
+
+# 28. 가장 중요한 UX 원칙
+
+이 앱의 핵심은
+
+**예약**
+
+이 아니라
+
+**기다림**
+
+이다.
+
+그리고 핵심 기능은
+
+AI Voice가 아니라
+
+**전화가 울리는 순간**
+
+이다.
+
+그래서 사용자가 전화 예약을 완료한 이후부터 실제 전화가 오기 전까지의 UX를 특히 신경 써서 구현한다.
+
+---
+
+# 29. 가장 중요한 화면
+
+우선순위.
+
+### P0
+
+홈
+
+Scenario 선택
+
+Voice 선택
+
+상황 입력
+
+예약 시간 선택
+
+예약 완료
+
+예약 Countdown
+
+Fake Incoming Call
+
+통화 UI
+
+통화 완료
+
+통화 기록
+
+---
+
+### P1
+
+Login
+
+Profile
+
+Voice Preview
+
+Call Memory
+
+Push Notification
+
+---
+
+### P2
+
+Custom Voice
+
+Payment
+
+Share
+
+Story Mode
+
+---
+
+# 30. 첫 번째 개발 목표
+
+처음부터 전체 서비스를 완성하려고 하지 말고 다음 Vertical Slice부터 구현한다.
+
+## Vertical Slice 01
+
+홈
+
+↓
+
+“10년 후의 나” 선택
+
+↓
+
+Voice 선택
+
+↓
+
+Situation 입력
+
+↓
+
+22:00 예약
+
+↓
+
+Countdown
+
+↓
+
+22:00에 Fake Incoming Call
+
+↓
+
+전화 받기
+
+↓
+
+AI와 대화
+
+↓
+
+전화 종료
+
+↓
+
+통화 기록 저장
+
+이 흐름을 완성한다.
+
+---
+
+# 31. 두 번째 개발 목표
+
+Vertical Slice 01이 완성되면
+
+Fake Incoming Call을
+
+실제 전화 발신으로 교체한다.
+
+Twilio Voice Webhook
+
+Media Stream
+
+Realtime AI
+
+TTS
+
+를 연결하여
+
+사용자의 실제 휴대폰으로 전화가 오게 한다.
+
+---
+
+# 32. 개발 방식
+
+한 번에 모든 코드를 작성하지 않는다.
+
+각 단계가 실제로 실행 가능한 상태인지 확인하면서 구현한다.
+
+다음 순서로 작업한다.
+
+1. 프로젝트 초기화
+
+2. Design System 구축
+
+3. Navigation
+
+4. Home
+
+5. Create Call Flow
+
+6. Scheduling
+
+7. Countdown
+
+8. Fake Incoming Call
+
+9. Mock Conversation
+
+10. Supabase 연결
+
+11. Authentication
+
+12. Call History
+
+13. AI Conversation
+
+14. Push Notification
+
+15. Twilio 실제 전화 연동
+
+16. Realtime Voice AI 연결
+
+17. Error Handling
+
+18. QA
+
+---
+
+# 33. 구현 시 중요한 조건
+
+모든 화면은 실제 모바일 크기를 기준으로 구현한다.
+
+iPhone 15 Pro 정도를 기준으로 디자인한다.
+
+Android에서도 레이아웃이 깨지면 안 된다.
+
+Loading / Empty / Error State를 반드시 만든다.
+
+API가 실패해도 앱이 강제 종료되지 않도록 한다.
+
+시간대는 사용자 timezone 기준으로 처리한다.
+
+예약 전화가 중복 실행되지 않게 한다.
+
+전화 발신 Webhook은 중복 호출에 대응할 수 있도록 idempotent하게 작성한다.
+
+API Key와 개인정보는 Client에 노출하지 않는다.
+
+전화번호는 Backend에서 관리한다.
+
+---
+
+# 34. 개인정보 및 음성 관련
+
+통화 녹음 및 Transcript 저장은 사용자가 동의한 경우에만 진행하도록 구조를 만든다.
+
+향후 Custom Voice 기능을 만들 경우
+
+본인 또는 사용 권한이 있는 음성만 등록할 수 있도록 동의 절차가 필요하다.
+
+유명인이나 제3자의 음성을 무단으로 복제하는 기능은 구현하지 않는다.
+
+---
+
+# 35. 최종적으로 원하는 느낌
+
+사용자는 앱에서 이렇게 행동한다.
+
+밤 9시 47분.
+
+앱을 연다.
+
+**오늘 누구에게 전화받고 싶나요?**
+
+“10년 후의 나”
+
+선택.
+
+상황 작성:
+
+“지금 일이 잘 안 풀려서 내가 제대로 살고 있는 건지 모르겠다.”
+
+전화 시간:
+
+22:00
+
+Voice:
+
+Noah
+
+예약.
+
+화면.
+
+**전화가 예약되었습니다.**
+
+전화까지
+
+00:12:31
+
+앱을 닫는다.
+
+22:00.
+
+실제 휴대폰이 울린다.
+
+📞
+
+전화를 받는다.
+
+잠깐의 침묵.
+
+“여보세요?”
+
+AI:
+
+“어… 나야.”
+
+사용자:
+
+“누구?”
+
+AI:
+
+“너.”
+
+“정확히는 10년 뒤의 너.”
+
+여기서부터 사용자의 답변을 이해하면서 실제 대화가 이어진다.
+
+이 순간이 이 제품의 핵심이다.
+
+---
+
+# 36. Codex에게 요청
+
+위 기획을 기준으로 실제 실행 가능한 프로젝트를 만들어줘.
+
+우선 **Vertical Slice 01**부터 완성해줘.
+
+처음에는 외부 API Key 없이 실행할 수 있도록 Demo Mode를 기본으로 사용한다.
+
+UI만 만들어놓지 말고 각 화면의 Navigation과 State가 실제로 연결되어야 한다.
+
+예약한 시간이 되면 Fake Incoming Call이 실제로 나타나야 한다.
+
+통화 종료 후 해당 통화 기록이 History에 저장되어야 한다.
+
+코드는 TypeScript로 작성한다.
+
+컴포넌트는 재사용 가능하게 분리한다.
+
+Mock Data와 Production API Layer를 분리해서 추후 실제 전화 API와 AI API를 쉽게 연결할 수 있게 한다.
+
+README에 다음 내용을 작성한다.
+
+* 설치 방법
+* 실행 방법
+* 환경변수 설정
+* 프로젝트 구조
+* Demo Mode 사용 방법
+* 실제 Twilio/OpenAI 연결 위치
+* 이후 개발해야 할 기능
+
+최우선 목표는
+
+**예쁜 화면을 많이 만드는 것이 아니라, 예약 → 기다림 → 전화 → 대화 → 기록이라는 전체 경험이 실제로 작동하는 것**이다.

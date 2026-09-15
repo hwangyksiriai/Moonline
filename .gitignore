@@ -1,0 +1,16 @@
+node_modules/
+.expo/
+dist/
+.env
+.env.*
+!.env.example
+*.log
+server/data/
+*.sqlite
+*.sqlite-*
+*.db
+*.db-*
+*.pem
+*.key
+.DS_Store
+Thumbs.db

@@ -1,0 +1,26 @@
+{
+  "expo": {
+    "name": "Moonline",
+    "slug": "moonline",
+    "scheme": "moonline",
+    "version": "0.2.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.moonline.demo"
+    },
+    "android": {
+      "package": "com.moonline.demo"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-notifications",
+      "expo-font",
+      "expo-secure-store"
+    ],
+    "web": {
+      "bundler": "metro"
+    }
+  }
+}
