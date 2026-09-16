@@ -1,7 +1,7 @@
 import { deviceSpeechOptions } from "../services/deviceVoice";
 import { wantsToEnd } from "../../shared/memory";
 import { useEffect, useRef, useState } from "react";
-import { Switch, ScrollView, Text, View, Vibration } from "react-native";
+import { Pressable, Switch, ScrollView, Text, View, Vibration } from "react-native";
 import * as Speech from "expo-speech";
 import { scenarioOf } from "../../shared/catalog";
 import {
@@ -14,7 +14,7 @@ import { MoonSpace } from "../components/Glass";
 import { waitingStage } from "../../shared/waiting";
 import { Button, Card, s, colors, sans } from "../components/ui";
 import { Field, SectionTitle } from "../components/fields";
-import { opening, mockReply } from "../services/conversation";
+import { opening, mockReply, replySuggestions } from "../services/conversation";
 import { DEMO } from "../services/config";
 import type { Night } from "../hooks/useNight";
 export function Waiting({
@@ -255,6 +255,8 @@ export function Conversation({
     if (locked.current || !text.trim()) return;
     locked.current = true;
     setBusy(true);
+    audioVersion.current++;
+    void Speech.stop();
     const token = ++version.current,
       next = [
         ...messages,
@@ -298,14 +300,16 @@ export function Conversation({
           ),
         )}
       </Text>
-      <Text style={[s.title, s.center]}>
+      <Text style={[s.title, s.center, { fontSize: 24, lineHeight: 30 }]}>
         {call.characterName || call.voice}
       </Text>
       <Text style={[s.body, s.center]}>
         {scenarioOf(call.scenarioId).title}
-        {"\n"}데모 대화 · 답장을 입력하거나 골라주세요.
+        {"\n"}체험 대화 · AI 미연결
+        {"\n"}준비된 답변으로 대화해요. 자유로운 대화에는 한계가 있어요.
       </Text>
-      <View style={[s.row, { justifyContent: "center" }]}>
+      <View style={[s.row, { justifyContent: "space-between" }]}>
+        <View style={s.row}>
         <Text style={s.body}>소리로 듣기</Text>
         <Switch
           accessibilityLabel="소리로 듣기"
@@ -317,6 +321,16 @@ export function Conversation({
             if (!v) void Speech.stop();
           }}
         />
+        </View>
+        <Pressable
+          accessibilityRole="button"
+          accessibilityState={{ disabled: busy }}
+          disabled={busy}
+          onPress={() => void send("다른 얘기 하자")}
+          style={{ minHeight: 44, paddingHorizontal: 10, justifyContent: "center", opacity: busy ? 0.4 : 1 }}
+        >
+          <Text style={[s.body, { color: colors.accent }]}>다른 얘기 하자</Text>
+        </Pressable>
       </View>
       {audioError ? <Text style={s.body}>{audioError}</Text> : null}
       {night.error ? (
@@ -326,6 +340,7 @@ export function Conversation({
       ) : null}
       <ScrollView
         ref={messageScroll}
+        keyboardShouldPersistTaps="handled"
         style={{ flex: 1 }}
         contentContainerStyle={{ gap: 12, paddingBottom: 10 }}
         onContentSizeChange={() =>
@@ -352,10 +367,10 @@ export function Conversation({
             </Text>
           </View>
         ))}
-        {busy ? <Text style={s.body}>잠시 생각하고 있어요…</Text> : null}
+        {busy ? <Text accessibilityLiveRegion="polite" style={s.body}>답장을 준비하고 있어요…</Text> : null}
       </ScrollView>
       <View style={s.row}>
-        {["다른 얘기 하자", "고마워"].map((t) => (
+        {replySuggestions(messages).map((t) => (
           <View key={t} style={{ flex: 1 }}>
             <Button secondary disabled={busy} onPress={() => void send(t)}>
               {t}
@@ -369,6 +384,7 @@ export function Conversation({
         onChangeText={setDraft}
         placeholder="지금의 마음을 들려주세요"
         maxLength={500}
+        returnKeyType="send"
         onSubmitEditing={() => void send()}
       />
       <View style={s.row}>

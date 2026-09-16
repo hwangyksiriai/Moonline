@@ -14,3 +14,10 @@ server/data/
 *.key
 .DS_Store
 Thumbs.db
+android/
+ios/
+*.apk
+*.aab
+*.jks
+*.keystore
+*.p12

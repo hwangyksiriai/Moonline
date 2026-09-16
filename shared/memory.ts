@@ -1,6 +1,6 @@
 import type { Call, Message } from "./model.ts";
 export const topicChange = (text: string) =>
-  /그만|무서워|싫어|다른\s*(얘기|이야기)|주제.*(바꾸|변경)/.test(text);
+  /다른\s*(얘기|이야기)|주제.*(바꾸|변경)|(?:얘기|이야기|말|질문).*그만|그만\s*(하자|해|말해|물어)|^\s*(그만|무서워|싫어)[.!~\s]*$/.test(text);
 export const wantsToEnd = (text: string) =>
   /통화.*(끝|끊|마치)|오늘은 여기까지|이제 끊자/.test(text);
 export function memoryLines(summary?: string): string[] {

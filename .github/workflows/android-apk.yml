@@ -1,0 +1,58 @@
+name: Build Android APK
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    env:
+      CI: '1'
+      EXPO_NO_TELEMETRY: '1'
+      EXPO_NO_DOTENV: '1'
+      EXPO_PUBLIC_DEMO_MODE: 'true'
+      NODE_ENV: production
+      MOONLINE_VERSION_CODE: ${{ github.run_number }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Install and check app
+        run: |
+          npm ci --include=dev --no-audit --no-fund
+          npm run typecheck
+          npm test
+      - name: Generate Android project
+        run: npx expo prebuild --platform android --no-install
+      - name: Build standalone demo APK with bundled test signature
+        run: |
+          node scripts/configure-android-build.cjs
+          cd android
+          chmod +x gradlew
+          ./gradlew :app:assembleRelease --no-daemon --max-workers=2 -PreactNativeArchitectures=arm64-v8a,armeabi-v7a -Dorg.gradle.jvmargs='-Xmx4g -XX:MaxMetaspaceSize=1g'
+      - name: Verify APK and prepare download
+        run: |
+          mkdir -p apk
+          cp android/app/build/outputs/apk/release/app-release.apk apk/Moonline-0.2.0-android.apk
+          BUILD_TOOLS="$(find "$ANDROID_HOME/build-tools" -mindepth 1 -maxdepth 1 -type d | sort -V | tail -n 1)"
+          "$BUILD_TOOLS/apksigner" verify --verbose --print-certs apk/Moonline-0.2.0-android.apk
+          "$BUILD_TOOLS/aapt" dump badging apk/Moonline-0.2.0-android.apk > apk/apk-info.txt
+          unzip -l apk/Moonline-0.2.0-android.apk | grep 'assets/index.android.bundle'
+          cd apk
+          sha256sum Moonline-0.2.0-android.apk > SHA256SUMS.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Moonline-Android-APK
+          path: apk/
+          if-no-files-found: error
+          retention-days: 30
